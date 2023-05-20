@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:14.5
+    container_name: random-team-generate
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DATABASES=random-team-generate_db
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+    tmpfs:
+      - /var/lib/postgresql
+
+volumes:
+  postgres:
+    driver: local
