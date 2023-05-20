@@ -1,5 +1,5 @@
 import { PlayerRepository } from '../repositories/player.repository';
-import { CreatePlayerDto } from '../dto/create-player.dto';
+import { CreatePlayerDto, randomSelector } from '../dto/create-player.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -10,5 +10,8 @@ export class PlayersUseCase {
   }
   async findAll() {
     return await this.prisma.findAll();
+  }
+  async update(id: string, data: randomSelector){
+    return this.prisma.update(id, data)
   }
 }

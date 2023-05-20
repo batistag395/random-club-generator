@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePlayerDto } from '../dto/create-player.dto';
+import { CreatePlayerDto, randomSelector } from '../dto/create-player.dto';
 import { Player } from '../entities/player.entity';
 import { UpdatePlayerDto } from '../dto/update-player.dto';
 
@@ -28,12 +28,12 @@ export class PlayerRepository {
       },
     });
   }
-  async update(id: string, updatePlayerDto: UpdatePlayerDto): Promise<Player> {
+  async update(id: string, updatePlayerDto: randomSelector): Promise<Player> {
     return this.prisma.player.update({
       where: {
         id,
       },
-      data: updatePlayerDto,
+      data: {team_name: updatePlayerDto.team_name},
     });
   }
   async remove(id: string): Promise<Player> {
