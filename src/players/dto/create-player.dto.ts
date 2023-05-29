@@ -17,5 +17,7 @@ export class CreateMultiplePlayerDto {
 
 export class randomSelector {
   @IsString()
-  team_name: string;
+  team_name?: string;
+  @IsString()
+  group?: string;
 }

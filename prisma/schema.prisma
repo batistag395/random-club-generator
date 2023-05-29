@@ -14,6 +14,7 @@ model player {
   id          String  @id @default(uuid())
   player_name String  @db.VarChar(255)
   team_name   String? @db.VarChar(255)
+  group       String? @db.VarChar(20)
 
   @@map("player")
 }

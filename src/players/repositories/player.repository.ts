@@ -20,7 +20,22 @@ export class PlayerRepository {
     }
     return await players;
   }
-
+  async findByGroup(group_number:string):Promise<Player[]>{
+    const group_list = []
+    const group = await this.prisma.player.findMany({
+      where:{
+        group: group_number,
+      }
+    })
+    for(const i of group){
+      let payload = {
+        player: i.player_name,
+        team_name: i.team_name
+      }
+      group_list.push(payload)
+    }
+    return group_list;
+  }
   async findOne(id: string) {
     return this.prisma.player.findUnique({
       where: {
@@ -33,7 +48,7 @@ export class PlayerRepository {
       where: {
         id,
       },
-      data: {team_name: updatePlayerDto.team_name},
+      data: updatePlayerDto,
     });
   }
   async remove(id: string): Promise<Player> {
