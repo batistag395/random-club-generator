@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PlayersUseCase } from '../use-cases/players.use-case';
 import { CreateMultiplePlayerDto } from '../dto/create-player.dto';
 import { TeamsService } from 'src/teams/use-cases/teams.use-case';
@@ -18,8 +18,8 @@ export class PlayersController {
       await this.playerUseCase.create(payload);
     }
   }
-  @Get('set-groups')
-  async whoAgainstWho(){
+  @Get('set-groups/:number_of_groups')
+  async whoAgainstWho(@Param('number_of_groups') number_of_groups: string){
     const player = await this.playerUseCase.findAll();
 
     for (let i = player.length - 1; i > 0; i--) {
@@ -28,47 +28,33 @@ export class PlayersController {
       // Reposicionando elemento
       [player[i], player[j]] = [player[j], player[i]];
     }    
-    const group_1 = [];
-    const group_2 = [];
-    const group_3 = [];
 
     let count = 0;
-    let grou_number;
+    let players = 0;
+    let group_number = 1;
+    
     const qtd = Object.keys(player).length;
-    for(const i of await player){
+    
+    for(const i in player){
       let payload = {
         group: "",
       }
-      if(i.group === null){
-        if(count < Math.round(qtd/3)){
-          group_1.push(i.player_name)
-          payload = {
-            group: "1",
+      if(player[players].group === null){
+        if(count <= (qtd/parseInt(number_of_groups))){
+          if(count === (qtd/parseInt(number_of_groups))){
+            group_number ++;
+            count = 0;
           }
-          this.playerUseCase.update(player[count].id, payload)
-          count++
-        }else if(count < Math.round((qtd/3 )* 2)){
           payload = {
-            group: "2",
+            group: group_number.toString()
           }
-          group_2.push(i.player_name);
-          this.playerUseCase.update(player[count].id, payload)
-          count++
-        }else if(count < qtd){
-          payload = {
-            group: "3",
-          }
-          group_3.push(i.player_name)
-          this.playerUseCase.update(player[count].id, payload)
+          this.playerUseCase.update(player[players].id, payload)
+          players++
           count++
         }
+      }else{
+        throw new BadRequestException('Os grupos ja foram definidos!')
       }
-      else{
-        throw new BadRequestException(`Os grupos ja foram definidos`)
-      }
-    }
-    return {
-      group_1, group_2, group_3
     }
   } 
   @Get('groups')
