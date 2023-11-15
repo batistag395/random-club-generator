@@ -9,6 +9,7 @@ export class PlayersController {
     private readonly playerUseCase: PlayersUseCase,
     private readonly teamUseCase: TeamsService,
     ) {}
+
   @Post('create')
   async create(@Body() createPlayerDto: CreateMultiplePlayerDto) {
     for (const i of createPlayerDto.player_name) {
@@ -19,7 +20,7 @@ export class PlayersController {
     }
   }
   @Get('set-groups/:number_of_groups')
-  async whoAgainstWho(@Param('number_of_groups') number_of_groups: string){
+  async whoAgainstWho(@Param('number_of_groups') number_of_groups?: string){
     const player = await this.playerUseCase.findAll();
 
     for (let i = player.length - 1; i > 0; i--) {
@@ -59,26 +60,30 @@ export class PlayersController {
   } 
   @Get('groups')
  async findGroups(){
-  const group_1 =  await this.playerUseCase.findGroups('1');
-  const group_2 =  await this.playerUseCase.findGroups('2');
-  const group_3 =  await this.playerUseCase.findGroups('3');
-  return {
-    group_1,
-    group_2,
-    group_3
+  const player = await this.playerUseCase.findAll();
+  const groupNumber = await this.playerUseCase.findGroupNumber()
+
+  const groupList = {}
+ for(var i = 1; i <= groupNumber.length; i++){
+   const players = player.filter((item) => 
+     +item.group ===  i
+   )
+   for(var j = 0; j < players.length; j++){
+     if(!(`group_${i}` in groupList)){
+      groupList[`group_${i}`] = []
+     }
+     groupList[`group_${i}`].push(players[j])
+     console.log(players.length)
+   }
+   
   }
+  return groupList;
  }
   
   @Get()
   async findAll() {
     const player = await this.playerUseCase.findAll();
-
-    for (let i = player.length - 1; i > 0; i--) {
-      // Escolhendo elemento aleatório
-      const j = Math.floor(Math.random() * (i + 1));
-      // Reposicionando elemento
-      [player[i], player[j]] = [player[j], player[i]];
-    }
+   
     return player;
   }
 
@@ -117,4 +122,33 @@ export class PlayersController {
       return player;
     }
   }
+   @Get('set-confrontation-group-stage')
+   async set_confrontation(){
+    const player = await this.playerUseCase.findAll();
+    const groupNumber = await this.playerUseCase.findGroupNumber()
+  
+    const groupList = {}
+   for(var i = 1; i <= groupNumber.length; i++){
+     const players = player.filter((item) => 
+       +item.group ===  i
+    )
+    for(var k = 0; k < players.length; k++) {
+     for (var j = k + 1; j < players.length; j++) {
+      
+      if(!(`group_${i}` in groupList)){
+        groupList[`group_${i}`] = []
+      }
+      groupList[`group_${i}`].push({
+        player_1: players[k].player_name,
+        player_2:  players[j].player_name,
+      })
+      groupList[`group_${i}`].push({
+        player_1:  players[j].player_name,
+        player_2: players[k].player_name,
+      })
+    }
+   }
+  }
+  return groupList;
+}
 }

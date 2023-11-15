@@ -13,13 +13,30 @@ export class PlayerRepository {
     });
   }
 
+  async findGroupNumber(): Promise<number[]>{
+    const players = await this.prisma.player.findMany();
+    if (!players) {
+      return [];
+    }
+    const group_list = []
+    for(const i of players){
+     
+      group_list.push(i.group)
+    }
+    const arraySemDuplicados = group_list.filter((valor, indice, self) => {
+      return self.indexOf(valor) === indice;
+    });
+    return arraySemDuplicados.sort();
+  }
+
   async findAll(): Promise<Player[]> {
     const players = await this.prisma.player.findMany();
     if (!players) {
       return [];
     }
-    return await players;
+    return players;
   }
+
   async findByGroup(group_number:string):Promise<Player[]>{
     const group_list = []
     const group = await this.prisma.player.findMany({
@@ -34,7 +51,7 @@ export class PlayerRepository {
       }
       group_list.push(payload)
     }
-    return group_list;
+    return group_list.sort();
   }
   async findOne(id: string) {
     return this.prisma.player.findUnique({

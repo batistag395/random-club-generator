@@ -25,3 +25,32 @@ model team {
 
   @@map("team")
 }
+
+model set_confrontation{
+  id        String @id @default(uuid())
+  id_player_1 String @db.VarChar(255)
+  player_1_name String @db.VarChar(255)
+  id_player_2 String @db.VarChar(255)
+  player_2_name String @db.VarChar(255)
+  winner String? @db.VarChar(255)
+  played Boolean @default(false)
+
+  @@map("set_confrontation")
+}
+
+model scoreboard {
+   id        String @id @default(uuid())
+  id_player String @db.VarChar(255)
+  player_name String @db.VarChar(255)
+  team_name String @db.VarChar(255)
+  Score String @db.VarChar(255)
+  game_played String @db.VarChar(255)
+  win String @db.VarChar(255)
+  draw String @db.VarChar(255)
+  loss String @db.VarChar(255)
+  goals_scored String @db.VarChar(255)
+  goals_conceded String @db.VarChar(255)
+  goals_difference String @db.VarChar(255)
+
+  @@map("scoreboard")
+}

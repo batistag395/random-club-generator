@@ -8,6 +8,11 @@ export class PlayersUseCase {
   async create(createPlayer: CreatePlayerDto) {
     return await this.prisma.create(createPlayer);
   }
+
+  async findGroupNumber(){
+    return await this.prisma.findGroupNumber()
+  }
+
   async findAll() {
     return await this.prisma.findAll();
   }
