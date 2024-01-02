@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { PlayersModule } from './players/players.module';
 import { TeamsModule } from './teams/teams.module';
 import { PrismaService } from './prisma/prisma.service';
-import { TeamsService } from './teams/use-cases/teams.use-case';
 import { TeamRepository } from './teams/repositories/team.repository';
 import { PlayerRepository } from './players/repositories/player.repository';
-import { PlayersUseCase } from './players/use-cases/players.use-case';
+import { CreatePlayerUseCase, GetGroupsUseCase, GetPlayersUseCase, SetClubsRandomWayUseCase, SetConfrontationGroupStageUseCase, SetGroupsUseCase } from './players/use-cases';
+import { GetTeamsUseCase, InsertTeamUseCase } from './teams/use-cases';
 
 @Module({
   imports: [PlayersModule, TeamsModule],
@@ -15,10 +15,16 @@ import { PlayersUseCase } from './players/use-cases/players.use-case';
   providers: [
     AppService,
     PrismaService,
-    TeamsService,
+    GetTeamsUseCase, 
+    InsertTeamUseCase,
     TeamRepository,
     PlayerRepository,
-    PlayersUseCase,
+    CreatePlayerUseCase,
+    GetGroupsUseCase,
+    GetPlayersUseCase,
+    SetClubsRandomWayUseCase,
+    SetConfrontationGroupStageUseCase,
+    SetGroupsUseCase
   ],
 })
 export class AppModule {}

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePlayerDto, randomSelector } from '../dto/create-player.dto';
+import { CreatePlayerDto, randomSelector, setConfrontationDto } from '../dto/create-player.dto';
 import { Player } from '../entities/player.entity';
 import { UpdatePlayerDto } from '../dto/update-player.dto';
+import { scoreboard } from '@prisma/client';
+import { Scoreboard } from '../entities/scoreboard.entity';
 
 @Injectable()
 export class PlayerRepository {
@@ -13,16 +15,18 @@ export class PlayerRepository {
     });
   }
 
-  async findGroupNumber(): Promise<number[]>{
+  async findGroupNumber(): Promise<any>{
     const players = await this.prisma.player.findMany();
     if (!players) {
       return [];
     }
     const group_list = []
     for(const i of players){
-     
-      group_list.push(i.group)
+     if(!(i.group === null)){
+       group_list.push(i.group)
+     }
     }
+    
     const arraySemDuplicados = group_list.filter((valor, indice, self) => {
       return self.indexOf(valor) === indice;
     });
@@ -74,5 +78,14 @@ export class PlayerRepository {
         id,
       },
     });
+  }
+  async setConfrontation( data: setConfrontationDto): Promise<void>{
+    await this.prisma.set_confrontation.create({data: data})
+  }
+  async getScoreboard(group: string): Promise<Scoreboard>{
+    const scores = await this.prisma.scoreboard.findMany({
+
+    })
+    return ;
   }
 }
