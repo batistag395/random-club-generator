@@ -8,4 +8,6 @@ export class SetConfrontation implements set_confrontation {
     player_2_name: string;
     winner: string;
     played: boolean;
+    group_stage: boolean;
+    play_offs: boolean;
 }

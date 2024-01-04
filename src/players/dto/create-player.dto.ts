@@ -24,7 +24,10 @@ export class randomSelector {
 
 export class scoreboardDto {
   @IsString()
-  id_player?: string;
+  id?: string;
+
+  @IsString()
+  id_player: string;
 
   @IsString()
   player_name?: string;
@@ -33,10 +36,10 @@ export class scoreboardDto {
   team_name?: string;
 
   @IsString()
-  Score?: string;
+  score?: string;
 
   @IsString()
-  game_played?: string;
+  matches?: string;
 
   @IsString()
   win?: string;
@@ -78,4 +81,19 @@ export class setConfrontationDto {
 
   @IsBoolean()
   played?: boolean;
+  @IsBoolean()
+  group_stage?: boolean;
+  @IsBoolean()
+  play_offs?: boolean;
+}
+
+export class UpdateConfrontationDto {
+  @IsString()
+  id: string;
+
+  @IsString()
+  goals_player_1: string;
+  
+  @IsString()
+  goals_player_2: string;
 }

@@ -34,6 +34,8 @@ model set_confrontation{
   player_2_name String @db.VarChar(255)
   winner String? @db.VarChar(255)
   played Boolean @default(false)
+  group_stage Boolean @default(false)
+  play_offs Boolean @default(false)
 
   @@map("set_confrontation")
 }
@@ -43,8 +45,8 @@ model scoreboard {
   id_player String @db.VarChar(255)
   player_name String @db.VarChar(255)
   team_name String @db.VarChar(255)
-  Score String @db.VarChar(255)
-  game_played String @db.VarChar(255)
+  matches String @db.VarChar(255)
+  score String @db.VarChar(255)
   win String @db.VarChar(255)
   draw String @db.VarChar(255)
   loss String @db.VarChar(255)

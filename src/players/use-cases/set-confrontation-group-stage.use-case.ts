@@ -54,16 +54,29 @@ export class SetConfrontationGroupStageUseCase {
             }
             x++;
         }
-        for (const matches of resultado) {
-            const payload = {
-              id_player_1: matches.id_player_1,
-              player_1_name: matches.player_1,
-              id_player_2: matches.id_player_2,
-              player_2_name: matches.player_2,
-            };
-          
-            await this.playerRepository.setConfrontation(payload);
-          }
+        const verify_if_inserted = await this.playerRepository.getConfrontation()
+        if(!verify_if_inserted){
+
+            for (const matches of resultado) {
+                const payload = {
+                  id_player_1: matches.id_player_1,
+                  player_1_name: matches.player_1,
+                  id_player_2: matches.id_player_2,
+                  player_2_name: matches.player_2,
+                };
+              
+                await this.playerRepository.setConfrontation(payload);
+            }
+           
+            player.find((item) => {
+                const paylod = {
+                    id_player: item.id,
+                    player_name: item.player_name,
+                    team_name: item.team_name
+                }
+                 this.playerRepository.insertScoreboard(paylod)
+            })
+        }
         return groupList;
    }
 }
